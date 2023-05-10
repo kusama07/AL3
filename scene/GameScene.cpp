@@ -1,60 +1,79 @@
-#pragma once
+#include "GameScene.h"
+#include "TextureManager.h"
+#include <cassert>
 
-#include "Audio.h"
-#include "DirectXCommon.h"
-#include "Input.h"
-#include "Model.h"
-#include "Player.h"
-#include "SafeDelete.h"
-#include "Sprite.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
+GameScene::GameScene() {}
 
-/// <summary>
-/// ゲームシーン
-/// </summary>
-class GameScene {
+GameScene::~GameScene() {
+	delete model_;
+	delete player_;
+}
 
-public: // メンバ関数
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
-	GameScene();
+void GameScene::Initialize() {
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~GameScene();
+	dxCommon_ = DirectXCommon::GetInstance();
+	input_ = Input::GetInstance();
+	audio_ = Audio::GetInstance();
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
+	textureHandle_ = TextureManager::Load("sample.png");
+	model_ = Model::Create();
 
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
-	void Update();
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw();
+	// 自キャラの生成
+	player_ = new Player();
+	// 自キャラの初期化
+	player_->Initialize(model_, textureHandle_);
+}
 
-private: // メンバ変数
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	Audio* audio_ = nullptr;
+void GameScene::Update() {
+	// 自キャラの更新
+	player_->Update();
+}
 
-	uint32_t textureHandle_ = 0;
-	Model* model_ = nullptr;
+void GameScene::Draw() {
 
-	WorldTransform worldTransform_;
-	ViewProjection viewProjection_;
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	Player* player_ = nullptr;
+#pragma region 背景スプライト描画
+	// 背景スプライト描画前処理
+	Sprite::PreDraw(commandList);
 
 	/// <summary>
-	/// ゲームシーン用
+	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-};
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+	// 深度バッファクリア
+	dxCommon_->ClearDepthBuffer();
+#pragma endregion
+
+#pragma region 3Dオブジェクト描画
+	// 3Dオブジェクト描画前処理
+	Model::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに3Dオブジェクトの描画処理を追加できる
+	/// </summary>
+	player_->Draw(viewProjection_);
+
+	// 3Dオブジェクト描画後処理
+	Model::PostDraw();
+#pragma endregion
+
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+
+#pragma endregion
+}
