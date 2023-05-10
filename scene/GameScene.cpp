@@ -6,7 +6,6 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
-	// 自キャラの解放
 	delete player_;
 }
 
@@ -15,12 +14,13 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	// ファイル名を指定してテクスチャを読み込む
+
 	textureHandle_ = TextureManager::Load("sample.png");
-	// 3Dモデルを生成
 	model_ = Model::Create();
-	// ビュープロジェクションを初期化
+
+	worldTransform_.Initialize();
 	viewProjection_.Initialize();
+
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
@@ -58,8 +58,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	// 自キャラの描画
-	player_->Draw();
+	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
