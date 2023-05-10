@@ -4,11 +4,11 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
+#include "Player.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -46,23 +46,10 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	uint32_t textureHandle_ = 0;
-	//スプライト
-	Sprite* sprite_ = nullptr;
-	//3Dモデル
 	Model* model_ = nullptr;
-	//ワールドトランスフォーム
-	WorldTransform worldTransfrom_;
-	//ビュープロジェクション
 	ViewProjection viewProjection_;
-	//サウンドデータハンドル
-	uint32_t soudDateHandle_ = 0;
-	//音声再生ハンドル
-	uint32_t voiceHandle_ = 0;
-	//ImGuiで値を入力する変数
-	float inputFloat3[3] = {0, 0, 0};
-	//でバックカメラ
-	DebugCamera* debugCamera_ = nullptr;
-
+	// 自キャラ
+	Player* player_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
