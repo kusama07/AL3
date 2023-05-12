@@ -1,5 +1,9 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include <cassert>
+#include "Input.h"
+#include "Matrix.h"
+#include "Vector3.h"
+#include "ImGuiManager.h"
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
@@ -8,9 +12,65 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
+
+	input_ = Input::GetInstance();
 }
 
-void Player::Update() { worldTransform_.TransferMatrix(); }
+void Player::Update() { 
+	worldTransform_.TransferMatrix();
+
+	//キャラクターの移動ベクトル
+	Vector3 move = {0, 0, 0};
+
+	//キャラクターの移動速さ
+	const float kCharacterSpeed = 0.2f;
+
+	//押した方向で移動ベクトルを変更(左右)
+	if (input_->PushKey(DIK_LEFT)) {
+		move.x -= kCharacterSpeed;
+	} else if (input_->PushKey(DIK_RIGHT)) {
+		move.x += kCharacterSpeed;
+	}
+
+	//押した方向で移動ベクトルを変更(上下)
+	if (input_->PushKey(DIK_UP)) {
+		move.y += kCharacterSpeed;
+	} else if (input_->PushKey(DIK_DOWN)) {
+		move.y -= kCharacterSpeed;
+	}
+
+	float inputFloat3[3] = {0, 0, 0};
+	float moves[3] = {move.x + 1, move.y + 1, move.z + 1};
+
+	ImGui::Begin("Player");
+	ImGui::SliderFloat3("SliderFloat3", moves, 0.0f, 2.0f);
+	ImGui::Text("SPACE:DebugCamera");
+	ImGui::End();
+
+	move.x = moves[0] - 1;
+	move.y = moves[1] - 1;
+	move.z = moves[2] - 1;
+
+
+
+	// 座標移動(ベクトルの加算)
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+
+	// 移動限界座標
+	const float kMoveLimitX = 34;
+	const float kMoveLimitY = 18;
+
+	// 範囲を超えない処理
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+
+	// 行列更新
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+}
 
 void Player::Draw(ViewProjection viewProjection) {
 
