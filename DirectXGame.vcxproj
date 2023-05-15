@@ -112,7 +112,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="WorldTransformEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -144,6 +146,7 @@
     <ClInclude Include="math\Vector4.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="scene\GameScene.h" />
   </ItemGroup>
   <ItemGroup>

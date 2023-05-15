@@ -3,6 +3,7 @@
 #include "WorldTransform.h"
 #include "model.h"
 #include "Input.h"
+#include"PlayerBullet.h"
 
 ///< summary>
 /// 自キャラ
@@ -20,6 +21,7 @@ public:
 	// 更新
 	//</summary>
 	void Update();
+	void Rotate();
 
 	//<summary>
 	// 描画
@@ -35,5 +37,11 @@ private:
 	uint32_t textureHandle_ = 0u;
 	//キーボード入力
 	Input* input_ = nullptr;
+	PlayerBullet* bullet_ = nullptr;
+
+	//<summary>
+	// 攻撃
+	//</summary>
+	void Attack();
 
 };
