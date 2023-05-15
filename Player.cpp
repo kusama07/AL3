@@ -5,6 +5,13 @@
 #include "Vector3.h"
 #include "ImGuiManager.h"
 
+Player::~Player() {
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+
+	}
+}
+
 void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 
@@ -73,8 +80,8 @@ void Player::Update() {
 	Attack();
 
 	// 弾更新
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
 
 }
@@ -100,7 +107,7 @@ void Player::Attack() {
 		newBullet->Initialize(model_, worldTransform_.translation_);
 
 		// 弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
 
@@ -110,8 +117,9 @@ void Player::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 	//弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
+
 	}
 
 }

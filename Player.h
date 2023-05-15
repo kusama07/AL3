@@ -3,12 +3,14 @@
 #include "WorldTransform.h"
 #include "model.h"
 #include "Input.h"
-#include"PlayerBullet.h"
+#include "PlayerBullet.h"
+#include <list>
 
 ///< summary>
 /// 自キャラ
 ///  </summary>
 class Player {
+
 public:
 	//<summary>
 	// 初期化
@@ -21,6 +23,7 @@ public:
 	// 更新
 	//</summary>
 	void Update();
+
 	void Rotate();
 
 	//<summary>
@@ -39,9 +42,17 @@ private:
 	Input* input_ = nullptr;
 	PlayerBullet* bullet_ = nullptr;
 
+	//弾
+	std::list<PlayerBullet*> bullets_;
+
 	//<summary>
 	// 攻撃
 	//</summary>
 	void Attack();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Player();
 
 };
