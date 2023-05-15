@@ -100,7 +100,7 @@ void Player::Rotate() {
 }
 
 void Player::Attack() {
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 
 		// 弾を生成し,初期化
 		PlayerBullet* newBullet = new PlayerBullet();
