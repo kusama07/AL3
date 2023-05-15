@@ -31,6 +31,11 @@ public:
 	//</summary>
 	void Draw(ViewProjection viewProjection);
 
+	//<summary>
+	// 攻撃
+	//</summary>
+	void Attack();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -44,11 +49,6 @@ private:
 
 	//弾
 	std::list<PlayerBullet*> bullets_;
-
-	//<summary>
-	// 攻撃
-	//</summary>
-	void Attack();
 
 	/// <summary>
 	/// デストラクタ
