@@ -5,7 +5,6 @@
 #include "Input.h"
 #include "Model.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
@@ -55,7 +54,6 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 
 	Player* player_ = nullptr;
-	Enemy* enemy_ = nullptr;
 
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
