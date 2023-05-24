@@ -10,6 +10,15 @@ public:
 
 	void Draw(ViewProjection viewProjection);
 
+	void ApproachPhase();
+
+	void LeavePhase();
+
+	enum class Phase {
+		Approach,
+		Leave,
+	};
+
 	~Enemy();
 
 private:
@@ -19,4 +28,7 @@ private:
 	Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+	//フェーズ
+	Phase phase_ = Phase::Approach;
+
 };
