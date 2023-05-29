@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include "WorldTransform.h"
 #include "model.h"
+#include "EnemyState.h"
+#include "Vector3.h"
+
+class EnemyState;
 
 class Enemy {
 public:
@@ -10,14 +14,11 @@ public:
 
 	void Draw(ViewProjection viewProjection);
 
-	void ApproachPhase();
+	void Move(Vector3 speed);
 
-	void LeavePhase();
+	void ChangePhase(EnemyState* newState);
 
-	enum class Phase {
-		Approach,
-		Leave,
-	};
+	Vector3 GetTranslation() { return worldTransform_.translation_; };
 
 	~Enemy();
 
@@ -29,6 +30,5 @@ private:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//フェーズ
-	Phase phase_ = Phase::Approach;
-
+	EnemyState* phase_ = nullptr;
 };
