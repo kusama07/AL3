@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "WorldTransform.h"
 #include "model.h"
+#include "EnemyBullet.h"
+#include "Matrix.h"
+#include <list>
 
 class Enemy {
 public:
@@ -14,10 +17,16 @@ public:
 
 	void LeavePhase();
 
+	void Fire();
+
 	enum class Phase {
 		Approach,
 		Leave,
 	};
+
+	static const int kFireInterval = 60;
+
+	void ApproachInitialize();
 
 	~Enemy();
 
@@ -30,5 +39,13 @@ private:
 	uint32_t textureHandle_ = 0u;
 	//フェーズ
 	Phase phase_ = Phase::Approach;
+
+	EnemyBullet* bullet_ = nullptr;
+
+	// 弾
+	std::list<EnemyBullet*> bullets_;
+
+	//発射タイマー
+	int32_t fireTimer = 0;
 
 };
