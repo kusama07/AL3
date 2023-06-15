@@ -5,6 +5,8 @@
 #include "Matrix.h"
 #include <list>
 
+class Player;
+
 class Enemy {
 public:
 	void Initialize(Model* model, uint32_t textureHandle);
@@ -30,6 +32,11 @@ public:
 
 	~Enemy();
 
+	void SetPlayer(Player* player) { player_ = player; }
+
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -47,5 +54,8 @@ private:
 
 	//発射タイマー
 	int32_t fireTimer = 0;
+
+	//自キャラ
+	Player* player_ = nullptr;
 
 };

@@ -40,6 +40,9 @@ public:
 	/// デストラクタ
 	/// </summary>
 	~Player();
+	
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 private:
 	// ワールド変換データ
@@ -54,5 +57,4 @@ private:
 
 	//弾
 	std::list<PlayerBullet*> bullets_;
-
 };

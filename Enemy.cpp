@@ -2,6 +2,18 @@
 #include "Matrix.h"
 #include <cassert>
 #include "TransforNormal.h"
+#include "Player.h" 
+
+Vector3 Enemy::GetWorldPosition() {
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	//ワールド行列の平行移動成分を取得（ワールド座標）
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
 
 Enemy::~Enemy() { 
 	for (EnemyBullet* bullet : bullets_) {
@@ -107,9 +119,22 @@ void Enemy::LeavePhase() {
 }
 
 void Enemy::Fire() {
+	assert(player_);
 	// 弾の速度
 	const float kBulletSpeed = -1.0f;
 	Vector3 velocity(0, 0, kBulletSpeed);
+
+	//自キャラのワールド座標を取得
+	player_->Player::GetWorldPosition();
+	//敵キャラのワールド座標を取得する
+	GetWorldPosition();
+	//敵キャラ→自キャラの差分ベクトルを求める
+	float a;
+	a = player_->Player::GetWorldPosition()  worldTransform_.translation_.z
+	//ベクトルの正規化
+	velocity = Normalize(velocity);
+	//ベクトルの長さを、速さに合わせる
+	velocity.z = a;
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
