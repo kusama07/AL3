@@ -130,11 +130,12 @@ void Enemy::Fire() {
 	GetWorldPosition();
 	//敵キャラ→自キャラの差分ベクトルを求める
 	float a;
-	a = player_->Player::GetWorldPosition()  worldTransform_.translation_.z
+	a = Player::worldTransform_.translation_.z;
 	//ベクトルの正規化
 	velocity = Normalize(velocity);
 	//ベクトルの長さを、速さに合わせる
 	velocity.z = a;
+
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
