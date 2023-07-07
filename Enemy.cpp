@@ -32,7 +32,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	worldTransform_.translation_.x = 7.0f;
 
 	worldTransform_.translation_.y = 2.0f;
-	worldTransform_.translation_.z = 15.0f;
+	worldTransform_.translation_.z = 30.0f;
 
 	ApproachInitialize();
 }
@@ -129,12 +129,21 @@ void Enemy::Fire() {
 	//敵キャラのワールド座標を取得する
 	GetWorldPosition();
 	//敵キャラ→自キャラの差分ベクトルを求める
-	float a;
-	a = Player::worldTransform_.translation_.z;
+	Player player;
+	float DifferentialVectorX;
+	float DifferentialVectorY;
+	float DifferentialVectorZ;
+
+	DifferentialVectorX = player.worldTransform_.translation_.x - worldTransform_.translation_.x;
+	DifferentialVectorY = player.worldTransform_.translation_.y - worldTransform_.translation_.y;
+	DifferentialVectorZ = player.worldTransform_.translation_.z - worldTransform_.translation_.z;
+
 	//ベクトルの正規化
 	velocity = Normalize(velocity);
 	//ベクトルの長さを、速さに合わせる
-	velocity.z = a;
+	velocity.x = kBulletSpeed;
+	velocity.y = kBulletSpeed;
+	velocity.z = kBulletSpeed;
 
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
