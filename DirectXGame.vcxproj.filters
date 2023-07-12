@@ -52,6 +52,24 @@
     <Filter Include="ソース ファイル\2d">
       <UniqueIdentifier>{814a0f6d-f847-4c45-856d-4688fa4c9e6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\myclass">
+      <UniqueIdentifier>{fa62983e-8e04-4ca4-902d-776722be10a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myclass\math">
+      <UniqueIdentifier>{51e818fa-24e8-4523-8018-096daaf88fa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\myclass">
+      <UniqueIdentifier>{f4192486-98d0-4017-a172-38699885ecb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\myclass\math">
+      <UniqueIdentifier>{2a2d65f1-ff22-4b25-8bdf-83d620381dfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myclass\gameplay">
+      <UniqueIdentifier>{0e56c209-31a3-47e3-a66c-f559857a54c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\myclass\gameplay">
+      <UniqueIdentifier>{44a6c102-310f-499f-b077-4f43916856a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,23 +87,26 @@
     <ClCompile Include="2d\ImGuiManager.cpp">
       <Filter>ソース ファイル\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\myclass\math</Filter>
     </ClCompile>
     <ClCompile Include="WorldTransformEx.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\myclass\math</Filter>
     </ClCompile>
     <ClCompile Include="TransforNormal.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\myclass\math</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\myclass\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ソース ファイル\myclass\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\myclass\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>ソース ファイル\myclass\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,20 +194,23 @@
     <ClInclude Include="2d\ImGuiManager.h">
       <Filter>ヘッダー ファイル\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\myclass\math</Filter>
     </ClInclude>
     <ClInclude Include="TransforNormal.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\myclass\math</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
