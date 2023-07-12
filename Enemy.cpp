@@ -3,10 +3,10 @@
 #include <cassert>
 #include "TransforNormal.h"
 #include "Player.h" 
+#include "EnemyBullet.h"
 
 Vector3 Enemy::GetWorldPosition() {
-	//ワールド座標を入れる変数
-	Vector3 worldPos;
+
 	//ワールド行列の平行移動成分を取得（ワールド座標）
 	worldPos.x = worldTransform_.translation_.x;
 	worldPos.y = worldTransform_.translation_.y;
@@ -29,10 +29,9 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_.x = 7.0f;
-
+	worldTransform_.translation_.x = 9.0f;
 	worldTransform_.translation_.y = 2.0f;
-	worldTransform_.translation_.z = 30.0f;
+	worldTransform_.translation_.z = 70.0f;
 
 	ApproachInitialize();
 }
@@ -125,26 +124,21 @@ void Enemy::Fire() {
 	Vector3 velocity(0, 0, kBulletSpeed);
 
 	//自キャラのワールド座標を取得
-	player_->Player::GetWorldPosition();
+	Vector3 playerWorldPosition = player.worldTransform_.translation_;
+
 	//敵キャラのワールド座標を取得する
 	GetWorldPosition();
-	//敵キャラ→自キャラの差分ベクトルを求める
-	Player player;
-	float DifferentialVectorX;
-	float DifferentialVectorY;
-	float DifferentialVectorZ;
 
-	DifferentialVectorX = player.worldTransform_.translation_.x - worldTransform_.translation_.x;
-	DifferentialVectorY = player.worldTransform_.translation_.y - worldTransform_.translation_.y;
-	DifferentialVectorZ = player.worldTransform_.translation_.z - worldTransform_.translation_.z;
+	//敵キャラ→自キャラの差分ベクトルを求める
+	Vector3 differentialVector;
+
+	differentialVector = Subtract(playerWorldPosition, worldPos);
 
 	//ベクトルの正規化
-	velocity = Normalize(velocity);
-	//ベクトルの長さを、速さに合わせる
-	velocity.x = kBulletSpeed;
-	velocity.y = kBulletSpeed;
-	velocity.z = kBulletSpeed;
+	Vector3 normalizedDiffVector = Normalize(differentialVector);
 
+	//ベクトルの長さを、速さに合わせる
+	velocity = VectorScale(normalizedDiffVector, kBulletSpeed);
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
