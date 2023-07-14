@@ -2,7 +2,6 @@
 #include "Matrix.h"
 #include <cassert>
 #include "TransforNormal.h"
-#include "Player.h" 
 #include "EnemyBullet.h"
 
 Vector3 Enemy::GetWorldPosition() {
@@ -120,11 +119,11 @@ void Enemy::LeavePhase() {
 void Enemy::Fire() {
 	assert(player_);
 	// 弾の速度
-	const float kBulletSpeed = -1.0f;
+	const float kBulletSpeed = 1.0f;
 	Vector3 velocity(0, 0, kBulletSpeed);
 
 	//自キャラのワールド座標を取得
-	Vector3 playerWorldPosition = player.worldTransform_.translation_;
+	Vector3 playerWorldPosition = player_->worldTransform_.translation_;
 
 	//敵キャラのワールド座標を取得する
 	GetWorldPosition();

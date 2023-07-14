@@ -3,6 +3,7 @@
 #include "model.h"
 #include "EnemyBullet.h"
 #include "Matrix.h"
+#include "Player.h" 
 #include <list>
 
 class Player;
@@ -60,5 +61,4 @@ private:
 
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
-	Player player;
 };
