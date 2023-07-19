@@ -41,6 +41,45 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(50,50);
 }
 
+void GameScene::CheckAllCollisions() { 
+	Vector3 posA, posB;
+
+	/*const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();*/
+
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+	#pragma region 自キャラと敵弾の当たり判定
+	// 自キャラの座標
+	posA = player_->Player::GetWorldPosition();
+
+	// 自キャラと敵弾すべての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->EnemyBullet::GetWorldPosition();
+		// 座標Aと座標Bの距離を求める
+		Vector3 distance = Subtract(posA, posB);
+		float distanceMagnitude = magnitude(distance);
+
+		if (distanceMagnitude < 0.0f) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す　
+			enemy_->OnCollision();
+		}
+	}
+
+#pragma endregion
+
+#pragma region 自キャラと敵キャラの当たり判定
+
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
+
+#pragma endregion
+
+}
+
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();

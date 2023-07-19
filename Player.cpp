@@ -151,3 +151,5 @@ void Player::Draw(ViewProjection viewProjection) {
 	}
 
 }
+
+void Player::OnCollision(){};

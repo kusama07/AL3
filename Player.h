@@ -47,6 +47,10 @@ public:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 
+	void OnCollision();
+
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
 private:
 	// モデル
 	Model* model_ = nullptr;

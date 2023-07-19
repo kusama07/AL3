@@ -38,6 +38,10 @@ public:
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	void OnCollision();
+
+	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;

@@ -18,7 +18,7 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 	return result;
 }
 
-Vector3 VectorScale(const Vector3& v1, const float & v2) {
+Vector3 VectorScale(const Vector3& v1, const float& v2) {
 	Vector3 result;
 	result.x = v1.x * v2;
 	result.y = v1.y * v2;
@@ -229,5 +229,11 @@ Vector3 Normalize(const Vector3& v) {
 		result.y = v.y / a;
 		result.z = v.z / a;
 	}
+	return result;
+}
+
+const float magnitude(const Vector3& v) {
+	float result{};
+	result = sqrtf(v.x * 2 + v.y * 2 + v.z * 2);
 	return result;
 }
