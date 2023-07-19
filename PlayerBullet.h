@@ -28,6 +28,8 @@ public:
 
 	void OnCollision();
 
+	Vector3 GetWorldPosition();
+
 	private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;

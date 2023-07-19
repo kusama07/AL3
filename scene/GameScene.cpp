@@ -42,9 +42,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::CheckAllCollisions() { 
+
 	Vector3 posA, posB;
 
-	/*const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();*/
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
 
@@ -60,7 +61,7 @@ void GameScene::CheckAllCollisions() {
 		Vector3 distance = Subtract(posA, posB);
 		float distanceMagnitude = magnitude(distance);
 
-		if (distanceMagnitude < 0.0f) {
+		if (distanceMagnitude <= 0.0f) {
 			// 自キャラの衝突時コールバックを呼び出す
 			player_->OnCollision();
 			// 敵弾の衝突時コールバックを呼び出す　
@@ -70,7 +71,19 @@ void GameScene::CheckAllCollisions() {
 
 #pragma endregion
 
-#pragma region 自キャラと敵キャラの当たり判定
+#pragma region 自弾と敵キャラの当たり判定
+	posA = enemy_->Enemy::GetWorldPosition();
+
+	for (PlayerBullet* bullet : playerBullets) {
+		posB = bullet->PlayerBullet::GetWorldPosition();
+		Vector3 distance = Subtract(posA, posB);
+		float distanceMagnitude = magnitude(distance);
+
+		if (distanceMagnitude <= 0.0f) {
+			player_->OnCollision();
+			enemy_->OnCollision();
+		}
+	}
 
 #pragma endregion
 
@@ -83,6 +96,7 @@ void GameScene::CheckAllCollisions() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
+	CheckAllCollisions();
 
 	if (enemy_ != nullptr) {
 		enemy_->Update();
