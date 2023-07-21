@@ -11,6 +11,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "DebugCamera.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -51,13 +52,17 @@ private: // メンバ変数
 	Audio* audio_ = nullptr;
 
 	uint32_t textureHandle_ = 0;
+	uint32_t skydomeTextureHandle_ = 0;
 	Model* model_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
+
+	Skydome* skydome_ = nullptr;
 
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;

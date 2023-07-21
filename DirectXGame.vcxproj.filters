@@ -108,6 +108,9 @@
     <ClCompile Include="PlayerBullet.cpp">
       <Filter>ソース ファイル\myclass\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>ソース ファイル\myclass\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -210,6 +213,9 @@
       <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
+      <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
       <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
     </ClInclude>
   </ItemGroup>

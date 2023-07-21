@@ -10,6 +10,8 @@ GameScene::~GameScene() {
 	delete player_;
 	delete debugCamera_;
 	delete enemy_;
+	delete skydome_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -19,10 +21,15 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	textureHandle_ = TextureManager::Load("sample.png");
+	skydomeTextureHandle_ = TextureManager::Load("/skydome/uvChecker.png");
 	model_ = Model::Create();
+	modelSkydome_ = Model::Create();
 
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
+
+	// 3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// 自キャラの生成
 	player_ = new Player();
@@ -33,6 +40,9 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	//敵の初期化
 	enemy_->Initialize(model_, textureHandle_);
+
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, skydomeTextureHandle_);
 
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
@@ -119,6 +129,7 @@ void GameScene::CheckAllCollisions() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
+	skydome_->Update();
 	CheckAllCollisions();
 
 	if (enemy_ != nullptr) {
@@ -185,6 +196,8 @@ void GameScene::Draw() {
 	if (enemy_ != nullptr) {
 		enemy_->Draw(viewProjection_);
 	}
+
+	skydome_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
