@@ -2,6 +2,7 @@
 #include "Vector3.h"
 #include "model.h"
 #include "WorldTransform.h"
+#include "ImGuiManager.h"
 
 class EnemyBullet {
 public:

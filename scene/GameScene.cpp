@@ -45,6 +45,11 @@ void GameScene::CheckAllCollisions() {
 
 	Vector3 posA, posB;
 
+	float playerRadius = 1.5f;
+	float enemyRadius = 1.5f;
+	float enemyBulletRadius = 1.5f;
+	float playerBulletRadius = 1.5f;
+
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
@@ -58,29 +63,30 @@ void GameScene::CheckAllCollisions() {
 		// 敵弾の座標
 		posB = bullet->EnemyBullet::GetWorldPosition();
 		// 座標Aと座標Bの距離を求める
-		Vector3 distance = Subtract(posA, posB);
-		float distanceMagnitude = magnitude(distance);
+		Vector3 distanceMagnitude = magnitude(posB, posA);
 
-		if (distanceMagnitude <= 0.0f) {
+		if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
+		    (enemyBulletRadius + playerRadius) * (enemyBulletRadius + playerRadius)) {
 			// 自キャラの衝突時コールバックを呼び出す
 			player_->OnCollision();
 			// 敵弾の衝突時コールバックを呼び出す　
-			enemy_->OnCollision();
+			bullet->OnCollision();
 		}
 	}
 
 #pragma endregion
 
 #pragma region 自弾と敵キャラの当たり判定
+
 	posA = enemy_->Enemy::GetWorldPosition();
 
 	for (PlayerBullet* bullet : playerBullets) {
 		posB = bullet->PlayerBullet::GetWorldPosition();
-		Vector3 distance = Subtract(posA, posB);
-		float distanceMagnitude = magnitude(distance);
+		Vector3 distanceMagnitude = magnitude(posB, posA);
 
-		if (distanceMagnitude <= 0.0f) {
-			player_->OnCollision();
+		if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
+		    (playerBulletRadius + enemyRadius) * (playerBulletRadius + enemyRadius)) {
+			bullet->OnCollision();
 			enemy_->OnCollision();
 		}
 	}
@@ -88,6 +94,23 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 
 #pragma region 自弾と敵弾の当たり判定
+
+	for (EnemyBullet* enemyBullet : enemyBullets) {
+
+		posA = enemyBullet->EnemyBullet::GetWorldPosition();
+		for (PlayerBullet* playerBullet : playerBullets) {
+
+			posB = playerBullet->PlayerBullet::GetWorldPosition();
+			Vector3 distanceMagnitude = magnitude(posB, posA);
+
+			if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
+			    (playerBulletRadius + enemyBulletRadius) *
+			        (playerBulletRadius + enemyBulletRadius)) {
+				enemyBullet->OnCollision();
+				playerBullet->OnCollision();
+			}
+		}
+	}
 
 #pragma endregion
 

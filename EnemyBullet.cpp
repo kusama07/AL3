@@ -30,6 +30,9 @@ void EnemyBullet::Initialize(Model* model, const Vector3& positon, const Vector3
 }
 
 void EnemyBullet::Update() { 
+	ImGui::Begin("EBullet");
+	ImGui::Text("isDead = %d", isDead_);
+	ImGui::End();
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 
@@ -41,9 +44,10 @@ void EnemyBullet::Update() {
 }
 
 void EnemyBullet::Draw(const ViewProjection& viewProjection) {
+	if (isDead_ == 0) {
 
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	
+		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	}
 }
 
 void EnemyBullet::OnCollision() { isDead_ = true; }

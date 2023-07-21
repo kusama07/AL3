@@ -232,8 +232,11 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
-const float magnitude(const Vector3& v) {
-	float result{};
-	result = sqrtf(v.x * 2 + v.y * 2 + v.z * 2);
+Vector3 magnitude(const Vector3& v1,const Vector3& v2) {
+	Vector3 result{};
+	result.x = (v2.x - v1.x) * (v2.x - v1.x);
+	result.y = (v2.y - v1.y) * (v2.y - v1.y);
+	result.z = (v2.z - v1.z) * (v2.z - v1.z);
+
 	return result;
 }
