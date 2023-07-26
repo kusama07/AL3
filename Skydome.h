@@ -4,7 +4,7 @@
 
 class Skydome {
 public:
-	void Initialize(Model* model, uint32_t skydomeTextureHandle);
+	void Initialize(Model* model);
 
 	void Update();
 
@@ -13,8 +13,6 @@ public:
 private:
 	// モデル
 	Model* model_ = nullptr;
-	// テクスチャハンドル
-	uint32_t skydomeTextureHandle_ = 0u;
 	WorldTransform worldTransform_;
 
 };
