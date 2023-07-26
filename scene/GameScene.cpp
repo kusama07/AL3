@@ -119,12 +119,12 @@ void GameScene::CheckAllCollisions() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
-	CheckAllCollisions();
 
 	if (enemy_ != nullptr) {
 		enemy_->Update();
 	}
 
+	CheckAllCollisions();
 	//デバッグカメラの更新
 	debugCamera_->Update();
 
