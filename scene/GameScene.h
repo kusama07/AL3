@@ -12,6 +12,7 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -65,6 +66,9 @@ private: // メンバ変数
 
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
+
+	//レールカメラ
+	RailCamera* railcamera_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

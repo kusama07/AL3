@@ -37,7 +37,6 @@ void GameScene::Initialize() {
 	//敵の初期化
 	enemy_->Initialize(model_, textureHandle_);
 
-
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
@@ -46,85 +45,15 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
+	//レールカメラの生成
+	railcamera_ = new RailCamera;
+	//レールカメラの初期化
+	railcamera_->Initialize(worldTransform_.translation_,worldTransform_.rotation_);
+
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
 }
 
-void GameScene::CheckAllCollisions() { 
-
-	Vector3 posA, posB;
-
-	float playerRadius = 1.5f;
-	float enemyRadius = 1.5f;
-	float enemyBulletRadius = 1.5f;
-	float playerBulletRadius = 1.5f;
-
-	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
-
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
-
-
-	#pragma region 自キャラと敵弾の当たり判定
-	// 自キャラの座標
-	posA = player_->Player::GetWorldPosition();
-
-	// 自キャラと敵弾すべての当たり判定
-	for (EnemyBullet* bullet : enemyBullets) {
-		// 敵弾の座標
-		posB = bullet->EnemyBullet::GetWorldPosition();
-		// 座標Aと座標Bの距離を求める
-		Vector3 distanceMagnitude = magnitude(posB, posA);
-
-		if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
-		    (enemyBulletRadius + playerRadius) * (enemyBulletRadius + playerRadius)) {
-			// 自キャラの衝突時コールバックを呼び出す
-			player_->OnCollision();
-			// 敵弾の衝突時コールバックを呼び出す　
-			bullet->OnCollision();
-		}
-	}
-
-#pragma endregion
-
-#pragma region 自弾と敵キャラの当たり判定
-
-	posA = enemy_->Enemy::GetWorldPosition();
-
-	for (PlayerBullet* bullet : playerBullets) {
-		posB = bullet->PlayerBullet::GetWorldPosition();
-		Vector3 distanceMagnitude = magnitude(posB, posA);
-
-		if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
-		    (playerBulletRadius + enemyRadius) * (playerBulletRadius + enemyRadius)) {
-			bullet->OnCollision();
-			enemy_->OnCollision();
-		}
-	}
-
-#pragma endregion
-
-#pragma region 自弾と敵弾の当たり判定
-
-	for (EnemyBullet* enemyBullet : enemyBullets) {
-
-		posA = enemyBullet->EnemyBullet::GetWorldPosition();
-		for (PlayerBullet* playerBullet : playerBullets) {
-
-			posB = playerBullet->PlayerBullet::GetWorldPosition();
-			Vector3 distanceMagnitude = magnitude(posB, posA);
-
-			if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
-			    (playerBulletRadius + enemyBulletRadius) *
-			        (playerBulletRadius + enemyBulletRadius)) {
-				enemyBullet->OnCollision();
-				playerBullet->OnCollision();
-			}
-		}
-	}
-
-#pragma endregion
-
-}
 
 void GameScene::Update() {
 	// 自キャラの更新
@@ -138,6 +67,10 @@ void GameScene::Update() {
 	//デバッグカメラの更新
 	debugCamera_->Update();
 
+	//レールカメラの更新
+	railcamera_->Update();
+
+	//スカイドームの更新
 	skydome_->Update();
 	#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -215,4 +148,80 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::CheckAllCollisions() { 
+
+	Vector3 posA, posB;
+
+	float playerRadius = 1.5f;
+	float enemyRadius = 1.5f;
+	float enemyBulletRadius = 1.5f;
+	float playerBulletRadius = 1.5f;
+
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+
+	#pragma region 自キャラと敵弾の当たり判定
+	// 自キャラの座標
+	posA = player_->Player::GetWorldPosition();
+
+	// 自キャラと敵弾すべての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->EnemyBullet::GetWorldPosition();
+		// 座標Aと座標Bの距離を求める
+		Vector3 distanceMagnitude = magnitude(posB, posA);
+
+		if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
+		    (enemyBulletRadius + playerRadius) * (enemyBulletRadius + playerRadius)) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す　
+			bullet->OnCollision();
+		}
+	}
+
+#pragma endregion
+
+#pragma region 自弾と敵キャラの当たり判定
+
+	posA = enemy_->Enemy::GetWorldPosition();
+
+	for (PlayerBullet* bullet : playerBullets) {
+		posB = bullet->PlayerBullet::GetWorldPosition();
+		Vector3 distanceMagnitude = magnitude(posB, posA);
+
+		if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
+		    (playerBulletRadius + enemyRadius) * (playerBulletRadius + enemyRadius)) {
+			bullet->OnCollision();
+			enemy_->OnCollision();
+		}
+	}
+
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
+
+	for (EnemyBullet* enemyBullet : enemyBullets) {
+
+		posA = enemyBullet->EnemyBullet::GetWorldPosition();
+		for (PlayerBullet* playerBullet : playerBullets) {
+
+			posB = playerBullet->PlayerBullet::GetWorldPosition();
+			Vector3 distanceMagnitude = magnitude(posB, posA);
+
+			if (distanceMagnitude.x + distanceMagnitude.y + distanceMagnitude.z <=
+			    (playerBulletRadius + enemyBulletRadius) *
+			        (playerBulletRadius + enemyBulletRadius)) {
+				enemyBullet->OnCollision();
+				playerBullet->OnCollision();
+			}
+		}
+	}
+
+#pragma endregion
+
 }
