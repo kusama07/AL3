@@ -190,7 +190,6 @@ void GameScene::CheckAllCollisions() {
 
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
 
-
 	#pragma region 自キャラと敵弾の当たり判定
 	// 自キャラの座標
 	posA = player_->Player::GetWorldPosition();

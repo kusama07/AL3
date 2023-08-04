@@ -134,7 +134,7 @@ void Enemy::Fire() {
 
 	// 弾を登録する
 	bullets_.push_back(newBullet);
-
+	
 }
 
 void Enemy::Draw(ViewProjection viewProjection) {
