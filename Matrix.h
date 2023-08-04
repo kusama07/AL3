@@ -3,6 +3,7 @@
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include <cmath>
+#include <cassert>
 
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 

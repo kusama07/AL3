@@ -15,7 +15,7 @@ public:
 	//<summary>
 	// 初期化
 	//</summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 playerPosition);
 	//<param name="model">モデル</param>
 	//<param name= "textureHandle">テクスチャハンドル</param>
 
@@ -50,6 +50,10 @@ public:
 	void OnCollision();
 
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
+	void SetParent(const WorldTransform* parent);
+
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 private:
 	// モデル

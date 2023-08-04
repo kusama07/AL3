@@ -29,8 +29,10 @@ void GameScene::Initialize() {
 
 	// 自キャラの生成
 	player_ = new Player();
+	Vector3 playerPosition(0, 0, 30);
+
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(model_, textureHandle_, playerPosition);
 
 	//敵の生成
 	enemy_ = new Enemy();
@@ -41,17 +43,25 @@ void GameScene::Initialize() {
 	enemy_->SetPlayer(player_);
 
 	//デバッグカメラの生成
-	debugCamera_ = new DebugCamera(50,50);
+	debugCamera_ = new DebugCamera(1280,720);
 	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	//レールカメラの生成
 	railcamera_ = new RailCamera;
+
+	//自キャラとレールカメラの親子関係を結ぶ
 	//レールカメラの初期化
-	railcamera_->Initialize(worldTransform_.translation_,worldTransform_.rotation_);
+	railcamera_->Initialize({0, 0, 0}, {0, 0, 0});
+	player_->SetParent(&railcamera_->GetWorldTransform());
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
+
+	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 
@@ -72,29 +82,27 @@ void GameScene::Update() {
 
 	//スカイドームの更新
 	skydome_->Update();
-	#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE)) {
-		isDebugCameraActive_ = true;
-	}
-	#endif
 
-	//カメラの処理
-	if (isDebugCameraActive_) {
-		// デバッグカメラの更新
+	#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_RETURN) && isDebugCameraActive_ == false) {
+		isDebugCameraActive_ = true;
+	} else if (input_->TriggerKey(DIK_RETURN) && isDebugCameraActive_ == true) {
+		isDebugCameraActive_ = false;
+	}
+
+	if (isDebugCameraActive_ == true) {
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		//ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		//ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		railcamera_->Update();
+		viewProjection_.matView = railcamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railcamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
 	}
 
-	//軸方向表示の表示を有効にする
-	AxisIndicator::GetInstance()->SetVisible(true);
-	//軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	#endif
 
 }
 
