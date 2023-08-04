@@ -15,9 +15,6 @@ Vector3 Enemy::GetWorldPosition() {
 }
 
 Enemy::~Enemy() { 
-	for (EnemyBullet* bullet : bullets_) {
-		delete bullet;
-	}
 }
 
 void Enemy::Initialize(Model* model, uint32_t textureHandle) { 
@@ -36,14 +33,6 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 }
 
 void Enemy::Update() { 
-	// デスフラグの立った弾を削除
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
 
 	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
@@ -66,9 +55,6 @@ void Enemy::Update() {
 	default:
 		ApproachPhase();
 		// 弾更新
-		for (EnemyBullet* bullet : bullets_) {
-			bullet->Update();
-		}
 		break;
 	case Phase::Leave:
 		LeavePhase();
@@ -154,9 +140,6 @@ void Enemy::Fire() {
 void Enemy::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 	// 弾描画
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Draw(viewProjection);
-	}
 }
 
 void Enemy::OnCollision() {}

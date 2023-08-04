@@ -12,6 +12,9 @@ GameScene::~GameScene() {
 	delete enemy_;
 	delete skydome_;
 	delete modelSkydome_;
+	for (EnemyBullet* enemybullet : enemyBullets_) {
+		delete enemybullet;
+	}
 }
 
 void GameScene::Initialize() {
@@ -38,6 +41,9 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	//敵の初期化
 	enemy_->Initialize(model_, textureHandle_);
+
+	//敵キャラにゲームシーンを渡す
+	enemy_->SetGameScene(this);
 
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
@@ -72,6 +78,16 @@ void GameScene::Update() {
 
 	if (enemy_ != nullptr) {
 		enemy_->Update();
+		enemyBullets_.remove_if([](EnemyBullet* bullet) {
+			if (bullet->IsDead()) {
+				delete bullet;
+				return true;
+			}
+			return false;
+		});
+		for (EnemyBullet* bullet : enemyBullets_) {
+			bullet->Update();
+		}
 	}
 
 	//デバッグカメラの更新
@@ -136,6 +152,9 @@ void GameScene::Draw() {
 
 	if (enemy_ != nullptr) {
 		enemy_->Draw(viewProjection_);
+		for (EnemyBullet* bullet : enemyBullets_) {
+			bullet->Draw(viewProjection_);
+		}
 	}
 
 	skydome_->Draw(viewProjection_);
@@ -231,5 +250,11 @@ void GameScene::CheckAllCollisions() {
 	}
 
 #pragma endregion
+
+}
+
+void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+	//リストに登録する
+	enemyBullets_.push_back(enemyBullet);
 
 }

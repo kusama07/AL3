@@ -8,6 +8,8 @@
 
 class Player;
 
+class GameScene;
+
 class Enemy {
 public:
 	void Initialize(Model* model, uint32_t textureHandle);
@@ -40,7 +42,8 @@ public:
 
 	void OnCollision();
 
-	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:
 	// ワールド変換データ
@@ -54,9 +57,6 @@ private:
 
 	EnemyBullet* bullet_ = nullptr;
 
-	// 弾
-	std::list<EnemyBullet*> bullets_;
-
 	//発射タイマー
 	int32_t fireTimer = 0;
 
@@ -65,4 +65,7 @@ private:
 
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
+
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
 };
