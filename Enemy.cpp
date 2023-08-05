@@ -3,6 +3,7 @@
 #include <cassert>
 #include "TransforNormal.h"
 #include "EnemyBullet.h"
+#include "GameScene.h"
 
 Vector3 Enemy::GetWorldPosition() {
 
@@ -15,9 +16,10 @@ Vector3 Enemy::GetWorldPosition() {
 }
 
 Enemy::~Enemy() { 
+
 }
 
-void Enemy::Initialize(Model* model, uint32_t textureHandle) { 
+void Enemy::Initialize(Model* model, uint32_t textureHandle, Vector3 position) { 
 	assert(model);
 
 	model_ = model;
@@ -25,21 +27,23 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_.x = 9.0f;
-	worldTransform_.translation_.y = 2.0f;
-	worldTransform_.translation_.z = 70.0f;
+	worldTransform_.translation_.x = position.x;
+	worldTransform_.translation_.y = position.y;
+	worldTransform_.translation_.z = position.z;
 
 	ApproachInitialize();
+
+	isDead_ = false;
 }
 
 void Enemy::Update() { 
 
+	worldTransform_.TransferMatrix(); 
 	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
 	// キャラクターの移動速さ
 	const float kCharacterSpeed = 0.05f;
 
-	worldTransform_.TransferMatrix(); 
 
 	move.z -= kCharacterSpeed;
 
@@ -60,6 +64,7 @@ void Enemy::Update() {
 		LeavePhase();
 		break;
 	}
+
 }
 
 void Enemy::ApproachInitialize() {
@@ -68,13 +73,8 @@ void Enemy::ApproachInitialize() {
 }
 
 void Enemy::ApproachPhase() {
-	// キャラクターの移動ベクトル
-	Vector3 move = {0, 0, 0};
-	const float kApproachCharacterSpeed = 0.05f;
-	move.z -= kApproachCharacterSpeed;
 
-	// 移動(ベクトルを加算)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	fireTimer--;
 	// 既定の位置に到達したら離脱
 	/*if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
@@ -100,6 +100,8 @@ void Enemy::LeavePhase() {
 	move.y += kLeaveCharacterSpeed;
 	// 移動（ベクトルを加算）
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 }
 
 void Enemy::Fire() {
@@ -109,37 +111,32 @@ void Enemy::Fire() {
 	Vector3 velocity(0, 0, kBulletSpeed);
 
 	//自キャラのワールド座標を取得
-	Vector3 playerWorldPosition = player_->worldTransform_.translation_;
+	Vector3 playerWorldPos = player_->GetWorldPosition();
+	// 敵のワールド座標を取得
+	Vector3 enemyWorldPos = GetWorldPosition();
+	// 敵キャラから自キャラへの差分ベクトルを求める
+	Vector3 diffVector = Subtract(playerWorldPos, enemyWorldPos);
 
-	//敵キャラのワールド座標を取得する
-	GetWorldPosition();
+	diffVector = Normalize(diffVector);
 
-	//敵キャラ→自キャラの差分ベクトルを求める
-	Vector3 differentialVector;
+	// ベクトルの長さを速さに合わせる
+	velocity = VectorScale(diffVector, kBulletSpeed);
 
-	differentialVector = Subtract(playerWorldPosition, worldPos);
-
-	//ベクトルの正規化
-	Vector3 normalizedDiffVector = Normalize(differentialVector);
-
-	//ベクトルの長さを、速さに合わせる
-	velocity = VectorScale(normalizedDiffVector, kBulletSpeed);
-
-	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
-	// 弾を生成し,初期化
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 	// 弾を登録する
-	bullets_.push_back(newBullet);
+	gameScene_->AddEnemyBullet(newBullet);
+
 	
 }
 
 void Enemy::Draw(ViewProjection viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	// 弾描画
+	if (isDead_ == false) {
+		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	}
 }
 
-void Enemy::OnCollision() {}
+void Enemy::OnCollision() { isDead_ = true; }

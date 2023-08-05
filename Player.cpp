@@ -24,7 +24,7 @@ Player::~Player() {
 	}
 }
 
-void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 playerPosition) {
+void Player::Initialize(Model* model, uint32_t textureHandle,const Vector3& playerPosition) {
 	assert(model);
 
 	model_ = model;

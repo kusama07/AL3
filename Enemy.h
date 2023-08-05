@@ -12,7 +12,7 @@ class GameScene;
 
 class Enemy {
 public:
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 position);
 
 	void Update();
 
@@ -25,6 +25,7 @@ public:
 	void Fire();
 
 	enum class Phase {
+		Start,
 		Approach,
 		Leave,
 	};
@@ -44,6 +45,8 @@ public:
 
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+	
+	bool IsDead() const { return isDead_; }
 
 private:
 	// ワールド変換データ
@@ -68,4 +71,6 @@ private:
 
 	//ゲームシーン
 	GameScene* gameScene_ = nullptr;
+
+	bool isDead_ = false;
 };
