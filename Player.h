@@ -51,6 +51,8 @@ public:
 
 	void SetParent(const WorldTransform* parent);
 
+	void GetMouse(ViewProjection viewProjection);
+
 	void DrawUI();
 
 private:
@@ -66,7 +68,10 @@ private:
 
 	Sprite* sprite2DReticle_ = nullptr;
 
-	Vector2 ReticlePos_;
+	Vector2 ReticlePos_ = {640,320};
+	Vector3 positionReticle_;
+
+	XINPUT_STATE joyState_;
 
 	//弾
 	std::list<PlayerBullet*> bullets_;
