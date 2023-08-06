@@ -19,5 +19,9 @@ Vector3 Normalize(const Vector3& v);
 
 Vector3 magnitude(const Vector3& v1,const Vector3&v2);
 
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
 // 逆行列
 Matrix4x4 Inverse(const Matrix4x4& m1);
+
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);

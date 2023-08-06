@@ -56,7 +56,7 @@ private:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//フェーズ
-	Phase phase_ = Phase::Approach;
+	Phase phase_ = Phase::Start;
 
 	EnemyBullet* bullet_ = nullptr;
 

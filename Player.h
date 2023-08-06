@@ -4,6 +4,7 @@
 #include "model.h"
 #include "Input.h"
 #include "PlayerBullet.h"
+#include "Sprite.h"
 #include <list>
 
 ///< summary>
@@ -22,7 +23,7 @@ public:
 	//<summary>
 	// 更新
 	//</summary>
-	void Update();
+	void Update(ViewProjection viewProjection);
 
 	void Rotate();
 
@@ -50,6 +51,8 @@ public:
 
 	void SetParent(const WorldTransform* parent);
 
+	void DrawUI();
+
 private:
 	WorldTransform worldTransform_;
 	// モデル
@@ -58,6 +61,12 @@ private:
 	uint32_t textureHandle_ = 0u;
 	//キーボード入力
 	Input* input_ = nullptr;
+
+	WorldTransform worldTransform3DReticle_;
+
+	Sprite* sprite2DReticle_ = nullptr;
+
+	Vector2 ReticlePos_;
 
 	//弾
 	std::list<PlayerBullet*> bullets_;
