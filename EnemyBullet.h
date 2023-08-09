@@ -2,6 +2,9 @@
 #include "Vector3.h"
 #include "model.h"
 #include "WorldTransform.h"
+#include <cmath>
+#include <iostream>
+#include "Matrix.h"
 
 class EnemyBullet {
 public:

@@ -16,6 +16,22 @@ void EnemyBullet::Initialize(Model* model, const Vector3& positon, const Vector3
 
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+
+	//Z方向に延びた形状
+	worldTransform_.scale_.x = 0.5f;
+	worldTransform_.scale_.y = 0.5f;
+	worldTransform_.scale_.z = 3.0f;
+
+	//y軸回り角度
+	worldTransform_.rotation_.y = std::atan2(velocity.x, velocity.z);
+
+	//Y軸回りに-Θy回す回転行列を計算
+	//velocity_二回転行列を掛け算してvelocityZを求める
+	float deltaZ = std::sqrt((velocity.x * velocity.x) + (velocity.z * velocity.z));
+
+	//X軸回り角度(Θx)
+	worldTransform_.rotation_.x = std::atan2(-velocity.y, deltaZ);
+
 }
 
 void EnemyBullet::Update() { 
