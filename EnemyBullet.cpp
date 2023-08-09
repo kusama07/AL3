@@ -27,10 +27,10 @@ void EnemyBullet::Initialize(Model* model, const Vector3& positon, const Vector3
 
 	//Y軸回りに-Θy回す回転行列を計算
 	//velocity_二回転行列を掛け算してvelocityZを求める
-	float deltaZ = std::sqrt((velocity.x * velocity.x) + (velocity.z * velocity.z));
+	float VelocityZ = std::sqrt((velocity.x * velocity.x) + (velocity.z * velocity.z));
 
 	//X軸回り角度(Θx)
-	worldTransform_.rotation_.x = std::atan2(-velocity.y, deltaZ);
+	worldTransform_.rotation_.x = std::atan2(-velocity.y, VelocityZ);
 
 }
 
