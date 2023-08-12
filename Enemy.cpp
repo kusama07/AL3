@@ -7,9 +7,9 @@
 Vector3 Enemy::GetWorldPosition() {
 
 	//ワールド行列の平行移動成分を取得（ワールド座標）
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }
@@ -36,40 +36,20 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 }
 
 void Enemy::Update() { 
-	// デスフラグの立った弾を削除
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
+	worldTransform_.TransferMatrix();
 
-	// キャラクターの移動ベクトル
 	Vector3 move = {0, 0, 0};
-	// キャラクターの移動速さ
-	const float kCharacterSpeed = 0.05f;
 
-	worldTransform_.TransferMatrix(); 
-
-	move.z -= kCharacterSpeed;
-
-	// 座標移動(ベクトルの加算)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-
-	// 行列更新
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
-	switch (phase_) { 
+	switch (phase_) {
 	case Phase::Approach:
 	default:
 		ApproachPhase();
-		// 弾更新
 		for (EnemyBullet* bullet : bullets_) {
 			bullet->Update();
 		}
+
 		break;
+
 	case Phase::Leave:
 		LeavePhase();
 		break;
@@ -89,6 +69,9 @@ void Enemy::ApproachPhase() {
 
 	// 移動(ベクトルを加算)
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
 	// 既定の位置に到達したら離脱
 	/*if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
@@ -118,37 +101,22 @@ void Enemy::LeavePhase() {
 
 void Enemy::Fire() {
 	assert(player_);
+
 	// 弾の速度
 	const float kBulletSpeed = 1.0f;
-	Vector3 velocity(0, 0, kBulletSpeed);
 
-	//自キャラのワールド座標を取得
-	Vector3 playerWorldPosition = player_->worldTransform_.translation_;
+	// 自キャラのワールド座標を取得
+	player_->GetWorldPosition();
 
-	//敵キャラのワールド座標を取得する
-	GetWorldPosition();
+	Vector3 velocity{0, 0, kBulletSpeed};
 
-	//敵キャラ→自キャラの差分ベクトルを求める
-	Vector3 differentialVector;
-
-	differentialVector = Subtract(playerWorldPosition, worldPos);
-
-	//ベクトルの正規化
-	Vector3 normalizedDiffVector = Normalize(differentialVector);
-
-	//ベクトルの長さを、速さに合わせる
-	velocity = VectorScale(normalizedDiffVector, kBulletSpeed);
-
-	// 速度ベクトルを自機の向きに合わせて回転させる
-	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
-	// 弾を生成し,初期化
 	EnemyBullet* newBullet = new EnemyBullet();
+
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-	// 弾を登録する
-	bullets_.push_back(newBullet);
+	newBullet->SetPlayer(player_);
 
+	bullets_.push_back(newBullet);
 }
 
 void Enemy::Draw(ViewProjection viewProjection) {

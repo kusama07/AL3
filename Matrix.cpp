@@ -231,3 +231,26 @@ Vector3 Normalize(const Vector3& v) {
 	}
 	return result;
 }
+
+float Dot(const Vector3& v1, const Vector3& v2) {
+	float result;
+	result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	return result;
+}
+
+Vector3 VectorSlerp(const Vector3& v1, const Vector3& v2, float t) {
+	Vector3 result;
+
+	float h = Dot(v1, v2);
+	float cosTheta = std::acos((h * (float)std::numbers::pi) / 180);
+	float sinTheta = std::sin(cosTheta);
+
+	float stert = std::sin((1 - t) * cosTheta) / sinTheta;
+	float end = std::sin(t * cosTheta) / sinTheta;
+
+	result.x = (stert * v1.x + end * v2.x);
+	result.y = (stert * v1.y + end * v2.y);
+	result.z = (stert * v1.z + end * v2.z);
+
+	return result;
+}

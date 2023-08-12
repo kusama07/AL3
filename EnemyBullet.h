@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include "Matrix.h"
+#include "Player.h"
 
 class EnemyBullet {
 public:
@@ -29,6 +30,8 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	void SetPlayer(Player* player) { player_ = player; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -43,4 +46,8 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 	// デスフラグ
 	bool isDead_ = false;
+	//プレイヤー
+	Player* player_ = nullptr;
+	Vector3 toPlayer;
+
 };

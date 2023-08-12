@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include <cmath>
+#include<numbers>
 
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 
@@ -17,3 +18,7 @@ Matrix4x4 MakeRotateMatrix(const Vector3& radian);
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) ;
 
 Vector3 Normalize(const Vector3& v);
+
+float Dot(const Vector3& v1, const Vector3& v2);
+
+Vector3 VectorSlerp(const Vector3& v1, const Vector3& v2, float t);
