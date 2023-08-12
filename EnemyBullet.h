@@ -4,6 +4,7 @@
 #include "WorldTransform.h"
 #include "ImGuiManager.h"
 #include "Collider.h"
+#include "CollisionConfig.h"
 
 class EnemyBullet : public Collider {
 public:
