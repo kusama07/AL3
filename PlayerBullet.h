@@ -2,8 +2,9 @@
 #include "Vector3.h"
 #include "model.h"
 #include "WorldTransform.h"
+#include "Collider.h"
 
-class PlayerBullet {
+class PlayerBullet : public Collider {
 public:
 	///<summary>
 	///初期化

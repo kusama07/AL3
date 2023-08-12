@@ -5,10 +5,11 @@
 #include "Matrix.h"
 #include "Player.h" 
 #include <list>
+#include "Collider.h"
 
 class Player;
 
-class Enemy {
+class Enemy : public Collider {
 public:
 	void Initialize(Model* model, uint32_t textureHandle);
 
@@ -36,9 +37,9 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 
 	//ワールド座標を取得
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition() override;
 
-	void OnCollision();
+	void OnCollision() override;
 
 	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
 

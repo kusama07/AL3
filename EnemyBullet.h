@@ -3,8 +3,9 @@
 #include "model.h"
 #include "WorldTransform.h"
 #include "ImGuiManager.h"
+#include "Collider.h"
 
-class EnemyBullet {
+class EnemyBullet : public Collider {
 public:
 	///< summary>
 	/// 初期化

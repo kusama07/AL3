@@ -212,6 +212,9 @@
     <ClInclude Include="PlayerBullet.h">
       <Filter>ヘッダー ファイル\myclass\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>ヘッダー ファイル\myclass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
