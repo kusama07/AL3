@@ -4,7 +4,9 @@
 
 class CollisionManager {
 public:
-	
+	void colliderlistRegister();
+
+	void colliderlistClear();
 
 private:
 	std::list<Collider*> colliders_;
