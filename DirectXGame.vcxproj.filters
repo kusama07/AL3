@@ -108,6 +108,9 @@
     <ClCompile Include="PlayerBullet.cpp">
       <Filter>ソース ファイル\myclass\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="CollisionConfig.h">
       <Filter>ヘッダー ファイル\myclass</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
