@@ -12,6 +12,7 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include "Collider.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -62,10 +63,8 @@ private: // メンバ変数
 
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
-	/// <summary>
-	/// コライダー2つの衝突判定と応答
-	/// </summary>
-	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
+
+	CollisionManager* collisionManager_;
 
 	/// <summary>
 	/// ゲームシーン用

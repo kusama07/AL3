@@ -4,11 +4,14 @@
 
 class CollisionManager {
 public:
-	void colliderlistRegister();
+	void CheckAllCollisions();
 
-	void colliderlistClear();
+	void RegisterCollider(Collider* collider) { colliders_.push_back(collider); }
+
+	void ClearCollider() { colliders_.clear(); }
 
 private:
 	std::list<Collider*> colliders_;
 
+	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 };
